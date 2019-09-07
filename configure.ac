@@ -407,12 +407,42 @@ case "${host_cpu}" in
 	    fi
 	fi
 	;;
+  powerpc*)
+	HAVE_CPU_SPINWAIT=1
+	CPU_SPINWAIT='__asm__ volatile("xori 0,0,0")'
+	;;
   *)
 	HAVE_CPU_SPINWAIT=0
 	;;
 esac
 AC_DEFINE_UNQUOTED([HAVE_CPU_SPINWAIT], [$HAVE_CPU_SPINWAIT])
 AC_DEFINE_UNQUOTED([CPU_SPINWAIT], [$CPU_SPINWAIT])
+
+CPU_SPINENTER=""
+case "${host_cpu}" in
+  powerpc*)
+	HAVE_CPU_SPINENTER=1
+	CPU_SPINENTER='__asm__ volatile("or 31,31,31")'
+	;;
+  *)
+	HAVE_CPU_SPINENTER=0
+	;;
+esac
+AC_DEFINE_UNQUOTED([HAVE_CPU_SPINENTER], [$HAVE_CPU_SPINENTER])
+AC_DEFINE_UNQUOTED([CPU_SPINENTER], [$CPU_SPINENTER])
+
+CPU_SPINEXIT=""
+case "${host_cpu}" in
+  powerpc*)
+	HAVE_CPU_SPINEXIT=1
+	CPU_SPINEXIT='__asm__ volatile("or 2,2,2")'
+	;;
+  *)
+	HAVE_CPU_SPINEXIT=0
+	;;
+esac
+AC_DEFINE_UNQUOTED([HAVE_CPU_SPINEXIT], [$HAVE_CPU_SPINEXIT])
+AC_DEFINE_UNQUOTED([CPU_SPINEXIT], [$CPU_SPINEXIT])
 
 AC_ARG_WITH([lg_vaddr],
   [AS_HELP_STRING([--with-lg-vaddr=<lg-vaddr>], [Number of significant virtual address bits])],

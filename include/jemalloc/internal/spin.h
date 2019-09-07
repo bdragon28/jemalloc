@@ -21,12 +21,18 @@ static inline void
 spin_adaptive(spin_t *spin) {
 	volatile uint32_t i;
 
+#if HAVE_CPU_SPINENTER
+	CPU_SPINENTER;
+#endif
 	if (spin->iteration < 5) {
 		for (i = 0; i < (1U << spin->iteration); i++) {
 			spin_cpu_spinwait();
 		}
 		spin->iteration++;
 	} else {
+#if HAVE_CPU_SPINEXIT
+		CPU_SPINEXIT;
+#endif
 #ifdef _WIN32
 		SwitchToThread();
 #else
